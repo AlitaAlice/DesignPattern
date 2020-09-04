@@ -1,5 +1,7 @@
 package com.alita.bishi;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 问题：顺时针螺旋输出数组
@@ -23,5 +25,27 @@ public class test4 {
         d=string.length()/count;
         System.out.println(String.format("%.2f", d));
     }
+
+    Scanner sc = new Scanner(System.in);
+    char[] chars = sc.nextLine().toCharArray();
+    List<Integer> list = new ArrayList<>();
+
+    int l=0, r=0;
+        while(r < chars.length){
+        if(chars[l] == chars[r])
+            r++;
+        else{
+            list.add(r-l);
+            l = r;
+        }
+    }
+        list.add(r-l);
+
+    double sum = 0;
+        for(int i : list)
+    sum += i;
+    double res = sum/list.size();
+        System.out.print(String.format("%.2f", res));
+
 }
 
