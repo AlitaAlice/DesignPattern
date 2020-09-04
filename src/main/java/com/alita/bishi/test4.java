@@ -7,25 +7,21 @@ import java.util.Arrays;
  * 思路：用一个二维数组来不同取值来控制前进，设置变动的边界为改变的条件
  */
 public class test4 {
-    public static void main(String[] args) {
-        int[][] arr = new int[][]{{1,2,3,4},{5,6,7,8},{9,10,11,12}};
-        System.out.println(Arrays.toString(spiralOrder(arr)));
-    }
-    public int longestOnes(int[] A, int K) {
-        //cnt记录当前0的数量
-        int left=0,right=0,res=0,cnt=0;
-        while(right<A.length){
-            if(A[right]==0)
-                cnt++;
-            //当0的数量超出要求时，移动左边界直至0的数量满足要求
-            while(cnt>K){
-                if(A[left++]==0)
-                    cnt--;
+
+    public static void main(String[] args){
+        Scanner in =new Scanner(System.in);
+        String string=null;
+        string=in.nextLine();
+        char s=string.charAt(0);
+        double count=1,d;
+        for (int i = 0; i < string.length(); i++) {
+            if (s!=string.charAt(i)) {
+                s=string.charAt(i);
+                count++;
             }
-            res=Math.max(res,right-left+1);
-            right++;
         }
-        return res;
+        d=string.length()/count;
+        System.out.println(String.format("%.2f", d));
     }
 }
 
