@@ -3,38 +3,56 @@ package com.alita;
 import java.util.Scanner;
 
 public class Main {
-    public static final String REG_NUMBER = ".*\\d+.*";
-    //小写字母
-    public static final String REG_UPPERCASE = ".*[A-Z]+.*";
-    //大写字母
-    public static final String REG_LOWERCASE = ".*[a-z]+.*";
-    //特殊符号
-    public static final String REG_SYMBOL = ".*[~!@#$%^&*()_+|<>,.?/:;'\\[\\]{}\"]+.*";
+    boolean[][] isVisited;
 
-    public static int checkPasswordRule(String password){
-        //密码为空或者长度小于8位则返回false
-        int i = 0;
-//        if (password == null || password.length() <120 ) return false;
+    public boolean exist(char[][] board, String word) {
+        return helper(board, word.toCharArray());
+    }
 
-        if(password.length()>=8&&password.length() <120) i++;
-        else return 1;
+    private boolean helper(char[][] board, char[] words) {
+        isVisited = new boolean[board.length][board[0].length];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == words[0]) {
+                    if (tryFind(board, words, 1, j, i)) return true;
+                }
+            }
+        }
+        return false;
+    }
 
-        if (password.matches(REG_NUMBER)) i++;
-        if (password.matches(REG_LOWERCASE))i++;
-        if (password.matches(REG_UPPERCASE)) i++;
-        if (password.matches(REG_SYMBOL)) i++;
-
-        if (i  < 3 )  return 2;
-
-        return 0;
+    //当前的wordIndex,nowX,nowY是否可以得到这个单词
+    private boolean tryFind(char[][] board, char[] words, int wordIndex, int nowX, int nowY) {
+        if (isVisited[nowY][nowX])
+            return false;
+        if (wordIndex == words.length)
+            return true;
+        isVisited[nowY][nowX] = true;
+        boolean success = false;
+        if (wordIndex < words.length) {
+            boolean b1, b2, b3, b4;
+            b1 = b2 = b3 = b4 = false;
+            if (nowX - 1 >= 0 && board[nowY][nowX - 1] == words[wordIndex])
+                b1 = tryFind(board, words, wordIndex + 1, nowX - 1, nowY);
+            if (nowX + 1 < board[0].length && board[nowY][nowX + 1] == words[wordIndex])
+                b2 = tryFind(board, words, wordIndex + 1, nowX + 1, nowY);
+            if (nowY - 1 >= 0 && board[nowY - 1][nowX] == words[wordIndex])
+                b3 = tryFind(board, words, wordIndex + 1, nowX, nowY - 1);
+            if (nowY + 1 < board.length && board[nowY + 1][nowX] == words[wordIndex])
+                b4 = tryFind(board, words, wordIndex + 1, nowX, nowY + 1);
+            success = b1 || b2 || b3 || b4;
+        }
+        if (!success)
+            isVisited[nowY][nowX] = false;
+        return success;
     }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String str = scanner.nextLine();
-        String[] chars=str.split(" ");
-        for (int i = 0; i < chars.length; i++) {
-            System.out.println(checkPasswordRule(chars[i]));
-        }
+        char[][] chars = {{'A','B','C','E'},{'S','F','C','S'},{'A','D','E','E'}};
+        Main main = new Main();
+        System.out.println(main.exist(chars, str));
+
     }
 
 }
