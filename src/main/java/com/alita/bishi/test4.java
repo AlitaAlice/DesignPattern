@@ -1,51 +1,45 @@
-package com.alita.bishi;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+class Solution {
+    boolean[][] isVisited;
 
-/**
- * 问题：顺时针螺旋输出数组
- * 题目特征：保持一种模式前进，遇到一定条件转换另一种模式前进
- * 思路：用一个二维数组来不同取值来控制前进，设置变动的边界为改变的条件
- */
-public class test4 {
+    public boolean exist(char[][] board, String word) {
+        return helper(board, word.toCharArray());
+    }
 
-    public static void main(String[] args){
-        Scanner in =new Scanner(System.in);
-        String string=null;
-        string=in.nextLine();
-        char s=string.charAt(0);
-        double count=1,d;
-        for (int i = 0; i < string.length(); i++) {
-            if (s!=string.charAt(i)) {
-                s=string.charAt(i);
-                count++;
+    private boolean helper(char[][] board, char[] words) {
+        isVisited = new boolean[board.length][board[0].length];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == words[0]) {
+                    if (tryFind(board, words, 1, j, i)) return true;
+                }
             }
         }
-        d=string.length()/count;
-        System.out.println(String.format("%.2f", d));
+        return false;
     }
 
-    Scanner sc = new Scanner(System.in);
-    char[] chars = sc.nextLine().toCharArray();
-    List<Integer> list = new ArrayList<>();
-
-    int l=0, r=0;
-        while(r < chars.length){
-        if(chars[l] == chars[r])
-            r++;
-        else{
-            list.add(r-l);
-            l = r;
+    //当前的wordIndex,nowX,nowY是否可以得到这个单词
+    private boolean tryFind(char[][] board, char[] words, int wordIndex, int nowX, int nowY) {
+        if (isVisited[nowY][nowX])
+            return false;
+        if (wordIndex == words.length)
+            return true;
+        isVisited[nowY][nowX] = true;
+        boolean success = false;
+        if (wordIndex < words.length) {
+            boolean b1, b2, b3, b4;
+            b1 = b2 = b3 = b4 = false;
+            if (nowX - 1 >= 0 && board[nowY][nowX - 1] == words[wordIndex])
+                b1 = tryFind(board, words, wordIndex + 1, nowX - 1, nowY);
+            if (nowX + 1 < board[0].length && board[nowY][nowX + 1] == words[wordIndex])
+                b2 = tryFind(board, words, wordIndex + 1, nowX + 1, nowY);
+            if (nowY - 1 >= 0 && board[nowY - 1][nowX] == words[wordIndex])
+                b3 = tryFind(board, words, wordIndex + 1, nowX, nowY - 1);
+            if (nowY + 1 < board.length && board[nowY + 1][nowX] == words[wordIndex])
+                b4 = tryFind(board, words, wordIndex + 1, nowX, nowY + 1);
+            success = b1 || b2 || b3 || b4;
         }
+        if (!success)
+            isVisited[nowY][nowX] = false;
+        return success;
     }
-        list.add(r-l);
-
-    double sum = 0;
-        for(int i : list)
-    sum += i;
-    double res = sum/list.size();
-        System.out.print(String.format("%.2f", res));
-
 }
-

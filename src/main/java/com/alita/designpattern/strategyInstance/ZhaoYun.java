@@ -17,6 +17,10 @@ public class ZhaoYun {
         /**
          * 封装类Context 定义一组算法，将每个算法都封装起来，并且使他们之间可以互换。
          */
+
+        /**
+         * 封装类中new new的话实现Istrategy的子类
+         */
         context = new Context(new BackDoor()); //拿到妙计
         context.operate();
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
